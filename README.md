@@ -3,16 +3,30 @@
 ## Description
 This is the internal UIUC repo for the Legend Extraction portion of DARPA CMASS TA1 project. I'm still working on adding documentation to this readme and the notebooks but getting everything uploaded for right now.
 
+## My TODO list
+* Finish ReadME
+  * Add Description of all the plots
+  * Add description of LegendExtractionDemo
+  * Update the Json format section
+* Put comments in notebooks so they are useful as learning tools
+* Add hydro environment setup script?
+* Change LegendExtractionDemo.py to be setup to work on hydro
+
 ## Installation
 Currently this project is using opencv, matplotlib, pandas, tqdm and easyocr. If we want an enviroment setup script let me know.
 
-## Key Functions
+## LegendExtractionDemo.py
+need to set these variables in LegendExtractionDemo to run it currently, could change these to a command line argument.
+sourceDataFolder = 
+outputFolder =
 
-extractLegends(image, filename='')
+## Key Functions of the code
+
+### extractLegends(image, filename='')
 
 extractLegends is the main function for generating predicted legends. It takes the map image and returns a json of the predictions in the USGS style. filename is an optional argument to add the img_filename that it was generated on which is consistent with USGS given jsons.
 
-scoreLegendExtraction(image, truth_json, predict_json, outputDir=None)
+### scoreLegendExtraction(image, truth_json, predict_json, outputDir=None)
 
 scoreLegendExtraction is the main function for scoring and takes the map image the json of the truth legends and the json of predicted legends. It then scores these based on the label and intersection of the contours.
 
