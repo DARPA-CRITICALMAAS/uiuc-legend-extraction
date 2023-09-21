@@ -16,8 +16,8 @@ import src.visualizations as my_viz
 from src.extraction import extractLegends
 from src.scoring import scoreLegendExtraction
 
-sourceDataFolder = '../data/validation'
-outputFolder = 'validation_results'
+sourceDataFolder = '../data/training'
+outputFolder = 'scoring_results'
 
 # Load a USGS formated json file
 def loadUSGSJson(filepath, polyDataOnly=False):
@@ -56,6 +56,8 @@ def main():
         if not os.path.exists(logdir):
             os.makedirs(logdir)
         os.rename(logfile, os.path.join(logdir, newfilename))
+    if not os.path.exists(outputFolder):
+        os.makedirs(outputFolder)
 
     log_utils.setup_logger(logfile, logging.DEBUG)
 
@@ -88,13 +90,15 @@ def main():
         log.info('\tExtracting Legends')
         predict_json = extractLegends(img)
         log.info('\tPredicted {} polygon legend features'.format(len(predict_json['shapes'])))
-
-        with open(os.path.join(outputFolder, mapname + '_predict.json'), 'w') as fh:
-            fh.write(json.dumps(predict_json))
-            
+  
         log.info('\tScoring predictions')
         score_df = scoreLegendExtraction(img, true_json, predict_json, outputDir=os.path.join(outputFolder, mapname))
 
+        # Do this after scoring so conversion to list doesn't effect anything
+        for s in predict_json['shapes']:
+            s['points'] = s['points'].tolist()
+        with open(os.path.join(outputFolder, mapname + '_predict.json'), 'w') as fh:
+            fh.write(json.dumps(predict_json))
         full_score_df = pd.concat([full_score_df, score_df])
         finished = finished + 1
     

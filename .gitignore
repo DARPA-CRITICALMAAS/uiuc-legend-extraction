@@ -1,2 +1,4 @@
+*.log
+/[Llogs]/
 /__pycache__/
 /[Ss]rc/__pycache__/
