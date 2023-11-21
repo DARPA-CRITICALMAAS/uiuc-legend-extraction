@@ -124,6 +124,7 @@ def scoreLegendExtraction(image, truth_json, predict_json, outputDir=None):
         # Generate Annotated Plot
         fig = mapOverviewPlot(annotated_img, score_df)
         fig.savefig(os.path.join(outputDir, '#' + mapname + '_Overview.png'))
+        plt.close(fig)
         # Save csv
         score_df.to_csv(os.path.join(outputDir, '#' + mapname + '_Scores.csv'))
 

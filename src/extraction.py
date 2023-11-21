@@ -2,13 +2,27 @@ import cv2
 import easyocr
 import numpy as np
 
-def extractLegends(image, filename=''):
-    contours = generateContours(image)
-    candidateContours = selectCandidateContours(contours)
+def maskLegendRegion(img, contour):
+    # Create mask from contour
+    mask = np.zeros_like(img)
+    cv2.drawContours(mask, np.expand_dims(contour, axis=0), 0, color=(255,255,255), thickness=cv2.FILLED)
+    # Apply mask to img
+    masked_img = img & mask
+    return masked_img
 
+def extractLegends(image, legendcontour=None):
+    # Apply mask if there is one
+    if legendcontour is not None:
+        image = maskLegendRegion(image, legendcontour)
+    
+    # Get Contours
+    contours = generateContours(image)
+    candidateContours = selectCandidateContours(contours, image.shape)
+
+    # OCR on possible legends
     ocrcandidates = ocrContours(image, candidateContours)
 
-    return generateJsonData(ocrcandidates, filename=filename, img_dims=image.shape)
+    return ocrcandidates
 
 def generateContours(img):
     # converting image into grayscale image
@@ -30,10 +44,10 @@ def generateContours(img):
 
     return contours
 
-def selectCandidateContours(contours):
+def selectCandidateContours(contours, image_dims):
     # Reducing selection to contours that are quaderlaterals of reasonable size.
-    max_contour_size = 50000 # 1% of image
-    min_contour_size = 1000
+    min_contour_size = image_dims[0]*image_dims[1]*0.000005 # 0.0005% of image area
+    max_contour_size = image_dims[0]*image_dims[1]*0.0005 # 0.05% of image area
     valid_bounds = 0.50 # Percent +/- threshold from median
 
     candidate_areas = []
@@ -136,24 +150,3 @@ def ocrContours(img, contours):
         features.append({'label' : f, 'points' : np.squeeze(labels[f][0][1])})
     return features
 
-def generateJsonData(features, filename='', img_dims=None):
-    json_data = {
-        'version' : '5.0.1',
-        'flags' : {'source' :  'UIUC Exported'},
-        'shapes' : [],
-        'imagePath' : filename,
-        'imagedata' : None,
-        'imageHeight' : None if img_dims is None else img_dims[0],
-        'imageWidth' : None if img_dims is None else img_dims[1]
-    }
-
-    for f in features:
-        json_data['shapes'].append({
-            'label' : '{}_poly'.format(f['label']),
-            'points' : f['points'],
-            'group_id' : None,
-            'shape_type' : 'rectangle',
-            'flags' : {}
-        })
-
-    return json_data
