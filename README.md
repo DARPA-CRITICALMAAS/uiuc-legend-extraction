@@ -67,7 +67,9 @@ outputDir
 
 ## USGS Json format 
 The USGS json format is mostly the same format as the one used for the CMA competition, but now the shape_type field indicates whether there are 2 points (rectangle) or 4 points (quad) to describe the bounding box.
+
 ![USGS json format diagram](img/USGSJson.png)
+
 Current as of Dec 2023
 
 ## Uncharted Json format
@@ -77,6 +79,7 @@ The Uncharted Json is based on the TA1 schema (i.e., list of PageExtraction sche
   * legend_points_lines -- legend region for point and/or line features
 
 ![Uncharted json format diagram](img/UnchartedJson.png)
+
 Current as of Dec 2023
 
 ## Authors and acknowledgment
