@@ -2,6 +2,7 @@ import os
 import cv2
 import json
 import logging
+import numpy as np
 
 log = logging.getLogger('DARPA_CMASS')
 
@@ -24,6 +25,9 @@ def loadUnchartedJson(filepath):
 
 # Load a USGS formated json file (For truth jsons)
 def loadUSGSJson(filepath, polyDataOnly=False):
+    if not os.path.exists(filepath):
+        return None
+    
     with open(filepath, 'r') as fh:
         json_data = json.load(fh)
 
@@ -53,7 +57,7 @@ def generateJsonData(features, filename='', force_rectangle=False, img_dims=None
         'flags' : {'source' :  'UIUC Exported'},
         'shapes' : [],
         'imagePath' : filename,
-        'imagedata' : None,
+        'imageData' : None,
         'imageHeight' : None if img_dims is None else img_dims[0],
         'imageWidth' : None if img_dims is None else img_dims[1]
     }

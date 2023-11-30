@@ -11,7 +11,7 @@ def start_logger(filepath, debuglvl, writemode='a'):
         os.makedirs(os.path.dirname(filepath))
 
     # Special handle for writing to 'latest' file
-    if os.path.splitext(os.path.basename(filepath.lower()))[0] == 'latest':
+    if os.path.exists(filepath) and os.path.splitext(os.path.basename(filepath.lower()))[0] == 'latest':
         # Rename previous latest log 
         with open(filepath) as fh:
             newfilename = '{}_{}.log'.format(*(fh.readline().split(' ')[0:2]))

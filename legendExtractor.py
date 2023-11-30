@@ -23,11 +23,11 @@ log = logging.getLogger('DARPA_CMASS')
 
 def parse_command_line():
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('--data', help='Directory containing the images to perform legend extraction on', type=str)
-    parser.add_argument('-o','--outputDir', default='', help='Directory that output files will be written to', type=str)
-    parser.add_argument('-m','--maskDir', default=None, help='Optional argument that if supplied will use the legend mask before predictions', type=str)
-    parser.add_argument('-t','--truthDir',default=None, help='Optional argument that if supplied while automatically score predictions against the truth json files found in this directory', type=str)
-    parser.add_argument('--debug', help='optional flag to provide debugging outputs as well', action='store_true')
+    parser.add_argument('data', help='Path to the directory containing the images to perform legend extraction on', type=str)
+    parser.add_argument('-o','--outputDir', default='legend_results', help='Path to the directory that the resulting json will be written to. If automatic scoring or debugging is enabled there respective outputs will be written here as well.', type=str)
+    parser.add_argument('-m','--maskDir', default=None, help='Path to a directory containing json files to be used for masking out the legend area.', type=str)
+    parser.add_argument('-t','--truthDir',default=None, help='Path to a directory containing json files to be used as truth values in automatic scoring.', type=str)
+    parser.add_argument('--debug', help='Flag to set enable debug statements in the log.', action='store_true')
 
     return parser.parse_args()
 

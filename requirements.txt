@@ -1,0 +1,5 @@
+opencv
+matplotlib
+pandas
+tqdm
+easyocr
